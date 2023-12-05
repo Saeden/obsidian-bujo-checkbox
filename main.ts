@@ -6,6 +6,9 @@ import {
 	PluginSettingTab,
 	Setting,
 	TextComponent,
+	Editor,
+	MarkdownEditView,
+	MarkdownView,
 } from "obsidian";
 
 // Remember to rename these classes and interfaces!
@@ -47,6 +50,7 @@ export default class ThirdState extends Plugin {
 			// console.log(evt);
 
 			const checkbox = Object(evt.target);
+
 			if (
 				evt.shiftKey &&
 				checkbox.className === "task-list-item-checkbox"
@@ -111,8 +115,10 @@ export default class ThirdState extends Plugin {
 	onCheckBoxChange = function (checkbox: HTMLElement) {
 		if (checkbox.dataset.task !== "/") {
 			checkbox.dataset.task = "/";
-			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = "/";
-			("/");
+			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+			const pos = view.Editor.posAtDOM(checkbox.dataset.task);
+			console.log(pos);
+			//Object(checkbox.closest(".HyperMD-list-line")).dataset.task = "/";
 			new Notice("Third state checkbox toggled!");
 			// this.app.workspace.trigger('editor:refresh');
 		} else if (checkbox.dataset.task === "/"){
