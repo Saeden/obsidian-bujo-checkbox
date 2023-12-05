@@ -112,10 +112,20 @@ export default class ThirdState extends Plugin {
 		if (checkbox.dataset.task !== "/") {
 			checkbox.dataset.task = "/";
 			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = "/";
+			("/");
+			new Notice("Third state checkbox toggled!");
+			// this.app.workspace.trigger('editor:refresh');
+		} else if (checkbox.dataset.task === "/"){
+			checkbox.dataset.task = ">";
+			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = ">";
+			(">");
+			new Notice("Fourth state checkbox toggled!");
 		} else {
 			checkbox.dataset.task = " ";
 			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = " ";
+			// this.app.workspace.trigger('editor:refresh');
 		}
+
 	};
 
 	// What to do onUnLoad Plugin
@@ -150,7 +160,7 @@ export default class ThirdState extends Plugin {
 	}
 
 	/**
-	 * Updatde style to be store in header.
+	 * Update style to be store in header.
 	 * Trigger by `addStyle` when plugin loading
 	 * Trigger by the changing of configuration
 	 */
