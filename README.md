@@ -1,9 +1,11 @@
-# Checkbox 3 states plugin
+# BulletJournal inspired states
 
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/hrenaud/obsidian-checkbox3states-plugin?style=for-the-badge&sort=semver)
 
-This plugin allows you to have a third state on the checkboxes of the task list.
-Works on mobile, try a long press.
+This plugin allows you to have multiple states for the checkbox. These states correspond to a half-done task. A migrated task (moved to a Monthly, Weekly or subsequent Daily log) and a scheduled task (moved to the Future log).
+Currently in testing phase.
+
+Forked from [Checkbox 3 states plugin](https://github.com/hrenaud/obsidian-checkbox3states-plugin)
 
 ## How to use.
 
