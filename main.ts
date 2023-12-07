@@ -6,10 +6,13 @@ import {
 	PluginSettingTab,
 	Setting,
 	TextComponent,
-	Editor,
-	MarkdownEditView,
 	MarkdownView,
+	EditorPosition,
 } from "obsidian";
+
+import {
+	EditorView,
+} from "@codemirror/view";
 
 // Remember to rename these classes and interfaces!
 
@@ -56,7 +59,7 @@ export default class ThirdState extends Plugin {
 				checkbox.className === "task-list-item-checkbox"
 			) {
 				evt.preventDefault();
-				this.onCheckBoxChange(checkbox);
+				this.checkState(checkbox);
 			}
 		});
 
@@ -109,30 +112,49 @@ export default class ThirdState extends Plugin {
 	};
 
 	/**
-	 * Handle checkbox interaction
+	 * Check the state of the checkbox, call the right state changed.
 	 * @param checkbox
 	 */
-	onCheckBoxChange = function (checkbox: HTMLElement) {
-		if (checkbox.dataset.task !== "/") {
-			checkbox.dataset.task = "/";
-			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-			const pos = view.Editor.posAtDOM(checkbox.dataset.task);
-			console.log(pos);
-			//Object(checkbox.closest(".HyperMD-list-line")).dataset.task = "/";
-			new Notice("Third state checkbox toggled!");
-			// this.app.workspace.trigger('editor:refresh');
+	checkState = function (checkbox: HTMLElement) {
+		if (checkbox.dataset.task === " ") {
+			this.changeState(checkbox, 'x');	
+			new Notice("Checkbox completion toggled!");
+		} else if (checkbox.dataset.task === "x"){
+			this.changeState(checkbox, '/');	
+			new Notice("Checkbox half completion toggled!");
 		} else if (checkbox.dataset.task === "/"){
-			checkbox.dataset.task = ">";
-			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = ">";
-			(">");
-			new Notice("Fourth state checkbox toggled!");
+			this.changeState(checkbox, '>');	
+			new Notice("Checkbox migration toggled!");
+		} else if (checkbox.dataset.task === ">"){
+			this.changeState(checkbox, '<');	
+			new Notice("Checkbox scheduling toggled!");
 		} else {
-			checkbox.dataset.task = " ";
-			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = " ";
-			// this.app.workspace.trigger('editor:refresh');
+			this.changeState(checkbox, ' ');	
+			new Notice("Checkbox reset!");
 		}
 
 	};
+
+	/**
+	 * Change the state of the checkbox.
+	 * @param checkbox
+	 * @param char
+	 */
+	changeState = function (checkbox: HTMLElement, char: String) {
+		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		const offset = view.editor.cm.posAtDOM(checkbox) - 2;
+		const offset_end = offset + 1;
+
+		const pos = view.editor.offsetToPos(offset);
+		const pos_end = view.editor.offsetToPos(offset_end);
+
+		view.editor.replaceRange(
+			char,
+			pos,
+			pos_end,
+		);
+	}
 
 	// What to do onUnLoad Plugin
 	onunload() {
