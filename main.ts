@@ -53,11 +53,7 @@ export default class BuJoStates extends Plugin {
 		// Using this function will automatically remove the event listener when this plugin is disabled.
 		// Mouse event
 		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-			// console.log(evt);
-
 			const checkbox = Object(evt.target);
-
-			
 
 			if (
 				checkbox.className === "task-list-item-checkbox" &&
@@ -71,39 +67,53 @@ export default class BuJoStates extends Plugin {
 				checkbox.className === "task-list-item-checkbox"
 				// trigger reset...
 			) {
-				console.error("Triggering reset is not implemented yet...")
+				new Notice("Triggering reset is not implemented yet...");
+				console.error("Triggering reset is not implemented yet...");
 			}
 		});
 
-		// Touch Start Event
-		this.registerDomEvent(
-			document,
-			"touchstart",
-			(evt: TouchEvent) => {
-				const checkbox = Object(evt.target);
-				if (checkbox.className === "task-list-item-checkbox") {
-					timer = setTimeout(
-						this.onlongtouch,
-						this.settings.touchduration,
-						checkbox
-					);
-				}
-			},
-			{ passive: false }
-		);
-
-		// Touch End Event
 		this.registerDomEvent(document, "touchend", (evt: TouchEvent) => {
 			const checkbox = Object(evt.target);
-			if (checkbox.className === "task-list-item-checkbox") {
-				if (timer) clearTimeout(timer); // clearTimeout, not cleartimeout..
-				if (longTouchDone) {
-					evt.preventDefault();
-					longTouchDone = false;
-					return;
-				}
+
+			if (
+				checkbox.className === "task-list-item-checkbox" &&
+				checkbox.dataset.task !== " " &&
+				checkbox.dataset.task !== "<"
+			) {
+				evt.preventDefault();
+				this.checkState(checkbox);
 			}
 		});
+
+		// // Touch Start Event
+		// this.registerDomEvent(
+		// 	document,
+		// 	"touchstart",
+		// 	(evt: TouchEvent) => {
+		// 		const checkbox = Object(evt.target);
+		// 		if (checkbox.className === "task-list-item-checkbox") {
+		// 			timer = setTimeout(
+		// 				this.onlongtouch,
+		// 				this.settings.touchduration,
+		// 				checkbox
+		// 			);
+		// 		}
+		// 	},
+		// 	{ passive: false }
+		// );
+
+		// // Touch End Event
+		// this.registerDomEvent(document, "touchend", (evt: TouchEvent) => {
+		// 	const checkbox = Object(evt.target);
+		// 	if (checkbox.className === "task-list-item-checkbox") {
+		// 		if (timer) clearTimeout(timer); // clearTimeout, not cleartimeout..
+		// 		if (longTouchDone) {
+		// 			evt.preventDefault();
+		// 			longTouchDone = false;
+		// 			return;
+		// 		}
+		// 	}
+		// });
 	}
 
 	/**
@@ -130,13 +140,13 @@ export default class BuJoStates extends Plugin {
 	checkState = function (checkbox: HTMLElement) {
 		if (checkbox.dataset.task === "x"){
 			this.changeState(checkbox, '/');	
-			new Notice("Checkbox half completion toggled!");
+			// new Notice("Checkbox half completion toggled!");
 		} else if (checkbox.dataset.task === "/"){
 			this.changeState(checkbox, '>');	
-			new Notice("Checkbox migration toggled!");
+			// new Notice("Checkbox migration toggled!");
 		} else if (checkbox.dataset.task === ">"){
 			this.changeState(checkbox, '<');	
-			new Notice("Checkbox scheduling toggled!");
+			// new Notice("Checkbox scheduling toggled!");
 		} 
 	};
 
