@@ -52,13 +52,18 @@ export default class BuJoStates extends Plugin {
 			
 
 			if (
-				//evt.shiftKey &&
 				checkbox.className === "task-list-item-checkbox" &&
 				checkbox.dataset.task !== " " &&
 				checkbox.dataset.task !== "<"
 			) {
 				evt.preventDefault();
 				this.checkState(checkbox);
+			} else if (
+				evt.shiftKey &&
+				checkbox.className === "task-list-item-checkbox"
+				// trigger reset...
+			) {
+				console.error("Triggering reset is not implemented yet...")
 			}
 		});
 
@@ -119,7 +124,7 @@ export default class BuJoStates extends Plugin {
 		// 	this.changeState(checkbox, 'x');	
 		// 	new Notice("Checkbox completion toggled!");
 		// } else 
-		if (checkbox.dataset.task === "x" || checkbox.dataset.task === " "){
+		if (checkbox.dataset.task === "x"){
 			this.changeState(checkbox, '/');	
 			new Notice("Checkbox half completion toggled!");
 		} else if (checkbox.dataset.task === "/"){
