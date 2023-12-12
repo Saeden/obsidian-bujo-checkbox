@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-checkbox3states-plugin",
-	"version": "1.1.5",
-	"description": "This is a simple plugin for add a third state to checkbox list.",
+	"name": "obsidian-bujo-checkbox-states",
+	"version": "0.1.1",
+	"description": "This is a simple plugin that adds 3 new states to the task checkbox, inspired by the BulletJournal method.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
@@ -15,19 +15,19 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/hrenaud/obsidian-checkbox3states-plugin.git"
+		"url": "git+https://github.com/Saeden/obsidian-bujo-checkbox"
 	},
 	"keywords": [
 		"obsidian",
 		"obsidian-plugin",
 		"checkbox"
 	],
-	"author": "Renaud Héluin / NovaGaïa <renaud.heluin@novagaia.fr>",
+	"author": "Matthijs Wolters <m.s.wolters@proton.me>",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/hrenaud/obsidian-checkbox3states-plugin/issues"
+		"url": "https://github.com/Saeden/obsidian-bujo-checkbox/issues"
 	},
-	"homepage": "https://github.com/hrenaud/obsidian-checkbox3states-plugin#readme",
+	"homepage": "https://github.com/Saeden/obsidian-bujo-checkbox/#readme",
 	"devDependencies": {
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",

@@ -13,15 +13,23 @@ import {
 
 interface BuJoStatesSettings {
 	touchduration: number;
-	baseColor: string;
-	hoverColor: string;
+	halfBaseColour: string,
+	halfHoverColour: string,
+	migrBaseColour: string,
+	migrHoverColour: string,
+	schedBaseColour: string,
+	schedHoverColour: string,
 }
 
 const DEFAULT_SETTINGS: BuJoStatesSettings = {
 	// touch duration before third check/uncheck
 	touchduration: 300,
-	baseColor: "#c77a0f",
-	hoverColor: "#ff930a",
+	halfBaseColour: "#c77a0f",
+	halfHoverColour: "#ff930a",
+	migrBaseColour: "#2596be",
+	migrHoverColour: "#65b3d2",
+	schedBaseColour: "#28A326",
+	schedHoverColour: "#45D042",
 };
 
 // timer var
@@ -179,7 +187,7 @@ export default class BuJoStates extends Plugin {
 	addStyle() {
 		// add a css block for our settings-dependent styles
 		const css = document.createElement("style");
-		css.id = "checkbox-3-state";
+		css.id = "checkbox-BuJo-states";
 		document.getElementsByTagName("head")[0].appendChild(css);
 
 		// update the style with the settings-dependent styles
@@ -193,27 +201,43 @@ export default class BuJoStates extends Plugin {
 	 */
 	updateStyle() {
 		// get the custom css element
-		const el = document.getElementById("checkbox-3-state");
-		if (!el) throw "checkbox-3-state element not found!";
+		const el = document.getElementById("checkbox-BuJo-states");
+		if (!el) throw "checkbox-BuJo-states element not found!";
 		else {
 			// set the settings-dependent css
 			el.innerText =
 				":root {" +
-				"--checkbox-3-state: " +
-				this.settings.baseColor +
+				"--checkbox-half-state: " +
+				this.settings.halfBaseColour +
 				";" +
-				"--checkbox-3-state-accent: " +
-				this.settings.hoverColor +
+				"--checkbox-half-state-accent: " +
+				this.settings.halfHoverColour +
 				";" +
-				"--checkbox-marker-mid-color: var(--checkbox-3-state);" +
-				"--checkbox-marker-mid-color-hover: var(--checkbox-3-state-accent);" +
+				"--checkbox-migr-state: " +
+				this.settings.migrBaseColour +
+				";" +
+				"--checkbox-migr-state-accent: " +
+				this.settings.migrHoverColour +
+				";" +
+				"--checkbox-sched-state: " +
+				this.settings.schedBaseColour +
+				";" +
+				"--checkbox-sched-state-accent: " +
+				this.settings.schedHoverColour +
+				";" +
+				"--checkbox-half-color: var(--checkbox-half-state);" +
+				"--checkbox-half-color-hover: var(--checkbox-half-state-accent);" +
+				"--checkbox-migr-color: var(--checkbox-migr-state);" +
+				"--checkbox-migr-color-hover: var(--checkbox-migr-state-accent);" +
+				"--checkbox-sched-color: var(--checkbox-sched-state);" +
+				"--checkbox-sched-color-hover: var(--checkbox-sched-state-accent);" +
 				"}";
 		}
 	}
 
 	// Clean html head on unload of plugin
 	removeStyle() {
-		const element = document.getElementById("checkbox-3-state");
+		const element = document.getElementById("checkbox-BuJo-states");
 		if (element) {
 			element.remove();
 		}
@@ -237,91 +261,243 @@ class SampleSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		containerEl.createEl("h2", {
-			text: "Checkbox 3 states plugin - Settings",
+			text: "Checkbox BuJo states plugin - Settings",
 		});
 
-		new Setting(containerEl)
-			.setName("About 👋")
-			.setDesc(
-				"This plugin allows you to have a third state on the checkboxes of the task list. Do a [SHIFT]+[CLICK] on a checkbox to set this third state (not fully done). It adds a `/` instead of an `x` as a value. You can customize the colors below. Enjoy!"
-			);
-		const baseColorCustomization = new Setting(containerEl)
-			.setName("Third state base color")
+		const halfBaseColourCustomization = new Setting(containerEl)
+			.setName("Half completed state base color")
 			.setDesc(
 				"The color of the checkbox Default value: " +
-					DEFAULT_SETTINGS.baseColor
+					DEFAULT_SETTINGS.halfBaseColour
 			);
-		const baseColorPicker = new ColorComponent(
-			baseColorCustomization.controlEl
+		const halfBaseColourPicker = new ColorComponent(
+		halfBaseColourCustomization.controlEl
 		)
-			.setValue(this.plugin.settings.baseColor)
-			.onChange(async (value) => {
-				this.plugin.settings.baseColor = value;
-				baseTextValue.setValue(value);
-				await this.plugin.saveSettings();
-				this.plugin.loadSettings();
-			});
-		const baseTextValue = new TextComponent(
-			baseColorCustomization.controlEl
+		.setValue(this.plugin.settings.halfBaseColour)
+		.onChange(async (value) => {
+			this.plugin.settings.halfBaseColour = value;
+			halfBaseTextValue.setValue(value);
+			await this.plugin.saveSettings();
+			this.plugin.loadSettings();
+		});
+		const halfBaseTextValue = new TextComponent(
+			halfBaseColourCustomization.controlEl
 		)
-			.setPlaceholder("Hexa value")
-			.setValue(this.plugin.settings.baseColor)
-			.onChange(async (value) => {
-				this.plugin.settings.baseColor = value;
-				baseColorPicker.setValue(value);
-				await this.plugin.saveSettings();
-			});
-		baseColorCustomization.addButton((bt) => {
+		.setPlaceholder("Hexa value")
+		.setValue(this.plugin.settings.halfBaseColour)
+		.onChange(async (value) => {
+			this.plugin.settings.halfBaseColour = value;
+			halfBaseColourPicker.setValue(value);
+			await this.plugin.saveSettings();
+		});
+		halfBaseColourCustomization.addButton((bt) => {
 			bt.setButtonText("Default").onClick(async () => {
-				this.plugin.settings.baseColor = DEFAULT_SETTINGS.baseColor;
-				baseColorPicker.setValue(DEFAULT_SETTINGS.baseColor);
-				baseTextValue.setValue(DEFAULT_SETTINGS.baseColor);
+				this.plugin.settings.halfBaseColour = DEFAULT_SETTINGS.halfBaseColour;
+				halfBaseColourPicker.setValue(DEFAULT_SETTINGS.halfBaseColour);
+				halfBaseTextValue.setValue(DEFAULT_SETTINGS.halfBaseColour);
 				await this.plugin.saveSettings();
 				this.plugin.loadSettings();
 			});
 		});
 
-		baseColorCustomization.components.push(baseColorPicker, baseTextValue);
+		halfBaseColourCustomization.components.push(halfBaseColourPicker, halfBaseTextValue);
 
-		const hoverColorCustomization = new Setting(containerEl)
-			.setName("Third state hover color")
+		const halfHoverColourCustomization = new Setting(containerEl)
+			.setName("Half completed state hover color")
 			.setDesc(
 				"The color of the checkbox when your cursor is over. Default value: " +
-					DEFAULT_SETTINGS.hoverColor
+					DEFAULT_SETTINGS.halfHoverColour
 			);
-		const hoverColorPicker = new ColorComponent(
-			hoverColorCustomization.controlEl
+		const halfHoverColourPicker = new ColorComponent(
+			halfHoverColourCustomization.controlEl
 		)
-			.setValue(this.plugin.settings.hoverColor)
+			.setValue(this.plugin.settings.halfHoverColour)
 			.onChange(async (value) => {
-				this.plugin.settings.hoverColor = value;
-				hoverTextValue.setValue(value);
+				this.plugin.settings.halfHoverColour = value;
+				halfHoverTextValue.setValue(value);
 				await this.plugin.saveSettings();
 				this.plugin.loadSettings();
 			});
-		const hoverTextValue = new TextComponent(
-			hoverColorCustomization.controlEl
+		const halfHoverTextValue = new TextComponent(
+			halfHoverColourCustomization.controlEl
 		)
 			.setPlaceholder("Hexa value")
-			.setValue(this.plugin.settings.hoverColor)
+			.setValue(this.plugin.settings.halfHoverColour)
 			.onChange(async (value) => {
-				this.plugin.settings.hoverColor = value;
-				hoverColorPicker.setValue(value);
+				this.plugin.settings.halfHoverColour = value;
+				halfHoverColourPicker.setValue(value);
 				await this.plugin.saveSettings();
 			});
-		hoverColorCustomization.addButton((bt) => {
+		halfHoverColourCustomization.addButton((bt) => {
 			bt.setButtonText("Default").onClick(async () => {
-				this.plugin.settings.hoverColor = DEFAULT_SETTINGS.hoverColor;
-				hoverColorPicker.setValue(DEFAULT_SETTINGS.hoverColor);
-				hoverTextValue.setValue(DEFAULT_SETTINGS.hoverColor);
+				this.plugin.settings.halfHoverColour = DEFAULT_SETTINGS.halfHoverColour;
+				halfHoverColourPicker.setValue(DEFAULT_SETTINGS.halfHoverColour);
+				halfHoverTextValue.setValue(DEFAULT_SETTINGS.halfHoverColour);
 				await this.plugin.saveSettings();
 				this.plugin.loadSettings();
 			});
 		});
 
-		hoverColorCustomization.components.push(
-			hoverColorPicker,
-			hoverTextValue
+		halfHoverColourCustomization.components.push(
+			halfHoverColourPicker,
+			halfHoverTextValue
+		);
+		const migrBaseColourCustomization = new Setting(containerEl)
+			.setName("Migration state base color")
+			.setDesc(
+				"The color of the checkbox Default value: " +
+					DEFAULT_SETTINGS.migrBaseColour
+			);
+		const migrBaseColourPicker = new ColorComponent(
+		migrBaseColourCustomization.controlEl
+		)
+		.setValue(this.plugin.settings.migrBaseColour)
+		.onChange(async (value) => {
+			this.plugin.settings.migrBaseColour = value;
+			migrBaseTextValue.setValue(value);
+			await this.plugin.saveSettings();
+			this.plugin.loadSettings();
+		});
+		const migrBaseTextValue = new TextComponent(
+			migrBaseColourCustomization.controlEl
+		)
+		.setPlaceholder("Hexa value")
+		.setValue(this.plugin.settings.migrBaseColour)
+		.onChange(async (value) => {
+			this.plugin.settings.migrBaseColour = value;
+			migrBaseColourPicker.setValue(value);
+			await this.plugin.saveSettings();
+		});
+		migrBaseColourCustomization.addButton((bt) => {
+			bt.setButtonText("Default").onClick(async () => {
+				this.plugin.settings.migrBaseColour = DEFAULT_SETTINGS.migrBaseColour;
+				migrBaseColourPicker.setValue(DEFAULT_SETTINGS.migrBaseColour);
+				migrBaseTextValue.setValue(DEFAULT_SETTINGS.migrBaseColour);
+				await this.plugin.saveSettings();
+				this.plugin.loadSettings();
+			});
+		});
+
+		migrBaseColourCustomization.components.push(migrBaseColourPicker, migrBaseTextValue);
+
+		const migrHoverColourCustomization = new Setting(containerEl)
+			.setName("Migration state hover color")
+			.setDesc(
+				"The color of the checkbox when your cursor is over. Default value: " +
+					DEFAULT_SETTINGS.migrHoverColour
+			);
+		const migrHoverColourPicker = new ColorComponent(
+			migrHoverColourCustomization.controlEl
+		)
+			.setValue(this.plugin.settings.migrHoverColour)
+			.onChange(async (value) => {
+				this.plugin.settings.migrHoverColour = value;
+				migrHoverTextValue.setValue(value);
+				await this.plugin.saveSettings();
+				this.plugin.loadSettings();
+			});
+		const migrHoverTextValue = new TextComponent(
+			migrHoverColourCustomization.controlEl
+		)
+			.setPlaceholder("Hexa value")
+			.setValue(this.plugin.settings.migrHoverColour)
+			.onChange(async (value) => {
+				this.plugin.settings.migrHoverColour = value;
+				migrHoverColourPicker.setValue(value);
+				await this.plugin.saveSettings();
+			});
+		migrHoverColourCustomization.addButton((bt) => {
+			bt.setButtonText("Default").onClick(async () => {
+				this.plugin.settings.migrHoverColour = DEFAULT_SETTINGS.migrHoverColour;
+				migrHoverColourPicker.setValue(DEFAULT_SETTINGS.migrHoverColour);
+				migrHoverTextValue.setValue(DEFAULT_SETTINGS.migrHoverColour);
+				await this.plugin.saveSettings();
+				this.plugin.loadSettings();
+			});
+		});
+
+		migrHoverColourCustomization.components.push(
+			migrHoverColourPicker,
+			migrHoverTextValue
+		);
+
+		const schedBaseColourCustomization = new Setting(containerEl)
+			.setName("Schedule state base color")
+			.setDesc(
+				"The color of the checkbox Default value: " +
+					DEFAULT_SETTINGS.schedBaseColour
+			);
+		const schedBaseColourPicker = new ColorComponent(
+		schedBaseColourCustomization.controlEl
+		)
+		.setValue(this.plugin.settings.schedBaseColour)
+		.onChange(async (value) => {
+			this.plugin.settings.schedBaseColour = value;
+			schedBaseTextValue.setValue(value);
+			await this.plugin.saveSettings();
+			this.plugin.loadSettings();
+		});
+		const schedBaseTextValue = new TextComponent(
+			schedBaseColourCustomization.controlEl
+		)
+		.setPlaceholder("Hexa value")
+		.setValue(this.plugin.settings.schedBaseColour)
+		.onChange(async (value) => {
+			this.plugin.settings.schedBaseColour = value;
+			schedBaseColourPicker.setValue(value);
+			await this.plugin.saveSettings();
+		});
+		schedBaseColourCustomization.addButton((bt) => {
+			bt.setButtonText("Default").onClick(async () => {
+				this.plugin.settings.schedBaseColour = DEFAULT_SETTINGS.schedBaseColour;
+				schedBaseColourPicker.setValue(DEFAULT_SETTINGS.schedBaseColour);
+				schedBaseTextValue.setValue(DEFAULT_SETTINGS.schedBaseColour);
+				await this.plugin.saveSettings();
+				this.plugin.loadSettings();
+			});
+		});
+
+		schedBaseColourCustomization.components.push(schedBaseColourPicker, schedBaseTextValue);
+
+		const schedHoverColourCustomization = new Setting(containerEl)
+			.setName("Schedule state hover color")
+			.setDesc(
+				"The color of the checkbox when your cursor is over. Default value: " +
+					DEFAULT_SETTINGS.schedHoverColour
+			);
+		const schedHoverColourPicker = new ColorComponent(
+			schedHoverColourCustomization.controlEl
+		)
+			.setValue(this.plugin.settings.schedHoverColour)
+			.onChange(async (value) => {
+				this.plugin.settings.schedHoverColour = value;
+				schedHoverTextValue.setValue(value);
+				await this.plugin.saveSettings();
+				this.plugin.loadSettings();
+			});
+		const schedHoverTextValue = new TextComponent(
+			schedHoverColourCustomization.controlEl
+		)
+			.setPlaceholder("Hexa value")
+			.setValue(this.plugin.settings.schedHoverColour)
+			.onChange(async (value) => {
+				this.plugin.settings.schedHoverColour = value;
+				schedHoverColourPicker.setValue(value);
+				await this.plugin.saveSettings();
+			});
+		schedHoverColourCustomization.addButton((bt) => {
+			bt.setButtonText("Default").onClick(async () => {
+				this.plugin.settings.schedHoverColour = DEFAULT_SETTINGS.schedHoverColour;
+				schedHoverColourPicker.setValue(DEFAULT_SETTINGS.schedHoverColour);
+				schedHoverTextValue.setValue(DEFAULT_SETTINGS.schedHoverColour);
+				await this.plugin.saveSettings();
+				this.plugin.loadSettings();
+			});
+		});
+
+		schedHoverColourCustomization.components.push(
+			schedHoverColourPicker,
+			schedHoverTextValue
 		);
 	}
 }

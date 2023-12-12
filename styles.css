@@ -1,11 +1,15 @@
 :root {
-	--checkbox-marker-mid-color: var(--checkbox-3-state);
-	--checkbox-marker-mid-color-hover: var(--checkbox-3-state-accent);
+	--checkbox-half-color: var(--checkbox-half-state);
+	--checkbox-half-color-hover: var(--checkbox-half-state-accent);
+	--checkbox-migr-color: var(--checkbox-migr-state);
+	--checkbox-migr-color-hover: var(--checkbox-migr-state-accent);
+	--checkbox-sched-color: var(--checkbox-sched-state);
+	--checkbox-sched-color-hover: var(--checkbox-sched-state-accent);
 }
 
 input[type="checkbox"][data-task="/"] {
-	background-color: var(--checkbox-marker-mid-color);
-	border-color: var(--checkbox-marker-mid-color);
+	background-color: var(--checkbox-half-color);
+	border-color: var(--checkbox-half-color);
 }
 input[type="checkbox"][data-task="/"]:after {
 	content: "";
@@ -22,6 +26,52 @@ input[type="checkbox"][data-task="/"]:after {
 }
 
 input[type="checkbox"][data-task="/"]:hover {
-	background-color: var(--checkbox-marker-mid-color-hover);
-	border-color: var(--checkbox-marker-mid-color-hover);
+	background-color: var(--checkbox-half-color-hover);
+	border-color: var(--checkbox-half-color-hover);
+}
+
+input[type="checkbox"][data-task=">"] {
+	background-color: var(--checkbox-migr-color);
+	border-color: var(--checkbox-migr-color);
+}
+input[type="checkbox"][data-task=">"]:after {
+	content: "";
+    top: -1px;
+    left: -1px;
+    position: absolute;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    display: block;
+    -webkit-mask-position: 52% 52%;
+    -webkit-mask-size: 65%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='16' height='16' viewBox='0 0 16 16' version='1.1' id='svg1' sodipodi:docname='migrated_icon.svg' inkscape:version='1.3 (0e150ed6c4, 2023-07-21)' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview1' pagecolor='%23ffffff' bordercolor='%23cccccc' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='1' inkscape:pagecheckerboard='0' inkscape:deskcolor='%23d1d1d1' inkscape:document-units='px' showgrid='true' inkscape:zoom='46.11082' inkscape:cx='2.895199' inkscape:cy='8.0458339' inkscape:window-width='1920' inkscape:window-height='1025' inkscape:window-x='0' inkscape:window-y='16' inkscape:window-maximized='1' inkscape:current-layer='layer3'%3E%3Cinkscape:grid id='grid1' units='px' originx='0' originy='0' spacingx='1' spacingy='1' empcolor='%230099e5' empopacity='0.30196078' color='%230099e5' opacity='0.14901961' empspacing='5' dotted='false' gridanglex='30' gridanglez='30' visible='true' /%3E%3C/sodipodi:namedview%3E%3Cdefs id='defs1' /%3E%3Cg inkscape:groupmode='layer' id='layer3' inkscape:label='Checkbox'%3E%3Cpath fill='%2523000000' fill-rule='evenodd' d='M 11.420158,9.0374719 5.0752911,14.651091 c -0.1906471,0.199601 -0.509353,0.199601 -0.7,0 l -0.698,-0.724 c -0.1923821,-0.202607 -0.1923821,-0.520393 0,-0.723 L 9.471866,8.135243 3.7290835,3.0627042 c -0.192382,-0.202607 -0.192382,-0.520393 0,-0.723 l 0.7,-0.723 c 0.192,-0.2 0.506,-0.2 0.697,0 l 6.7431435,6.0381905 c 0.319353,0.2417125 0.276874,0.7743558 0.0104,0.954153' id='path1' sodipodi:nodetypes='cccccccccccc' /%3E%3C/g%3E%3C/svg%3E");
+}
+
+input[type="checkbox"][data-task=">"]:hover {
+	background-color: var(--checkbox-migr-color-hover);
+	border-color: var(--checkbox-migr-color-hover);
+}
+
+input[type="checkbox"][data-task="<"] {
+	background-color: var(--checkbox-sched-color);
+	border-color: var(--checkbox-sched-color);
+}
+input[type="checkbox"][data-task="<"]:after {
+	content: "";
+    top: -1px;
+    left: -1px;
+    position: absolute;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    display: block;
+    -webkit-mask-position: 52% 52%;
+    -webkit-mask-size: 65%;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='16' height='16' viewBox='0 0 16 16' version='1.1' id='svg1' inkscape:version='1.3 (0e150ed6c4, 2023-07-21)' sodipodi:docname='scheduled.svg' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview1' pagecolor='%23ffffff' bordercolor='%23cccccc' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='1' inkscape:pagecheckerboard='0' inkscape:deskcolor='%23d1d1d1' inkscape:document-units='px' inkscape:zoom='25.51595' inkscape:cx='9.6410284' inkscape:cy='9.0139696' inkscape:window-width='1920' inkscape:window-height='1025' inkscape:window-x='0' inkscape:window-y='16' inkscape:window-maximized='1' inkscape:current-layer='layer1' /%3E%3Cdefs id='defs1' /%3E%3Cg inkscape:label='Layer 1' inkscape:groupmode='layer' id='layer1'%3E%3Cpath fill='%2523000000' fill-rule='evenodd' d='m 4.247009,8.9980824 6.488155,5.6136196 c 0.194952,0.199601 0.520856,0.199601 0.715808,0 l 0.713763,-0.724 c 0.196727,-0.202607 0.196727,-0.520393 0,-0.723 L 6.2392996,8.0958535 12.111773,3.0233147 c 0.196727,-0.202607 0.196727,-0.520393 0,-0.723 l -0.715808,-0.723 c -0.196336,-0.2 -0.517427,-0.2 -0.712741,0 L 3.7877986,7.6155052 C 3.4612346,7.8572177 3.5046729,8.389861 3.7771636,8.5696582' id='path1-1' sodipodi:nodetypes='cccccccccccc' style='stroke-width:1.01123' /%3E%3C/g%3E%3C/svg%3E");
+}
+
+input[type="checkbox"][data-task="<"]:hover {
+	background-color: var(--checkbox-sched-color-hover);
+	border-color: var(--checkbox-sched-color-hover);
 }
