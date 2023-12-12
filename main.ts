@@ -20,8 +20,8 @@ interface BuJoStatesSettings {
 const DEFAULT_SETTINGS: BuJoStatesSettings = {
 	// touch duration before third check/uncheck
 	touchduration: 300,
-	baseColor: "#ff930a",
-	hoverColor: "#c77a0f",
+	baseColor: "#c77a0f",
+	hoverColor: "#ff930a",
 };
 
 // timer var
