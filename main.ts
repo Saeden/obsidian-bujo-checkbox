@@ -7,22 +7,17 @@ import {
 	Setting,
 	TextComponent,
 	MarkdownView,
-	EditorPosition,
 } from "obsidian";
-
-import {
-	EditorView,
-} from "@codemirror/view";
 
 // Remember to rename these classes and interfaces!
 
-interface ThirdStateSettings {
+interface BuJoStatesSettings {
 	touchduration: number;
 	baseColor: string;
 	hoverColor: string;
 }
 
-const DEFAULT_SETTINGS: ThirdStateSettings = {
+const DEFAULT_SETTINGS: BuJoStatesSettings = {
 	// touch duration before third check/uncheck
 	touchduration: 300,
 	baseColor: "#ff930a",
@@ -33,8 +28,8 @@ const DEFAULT_SETTINGS: ThirdStateSettings = {
 let timer: ReturnType<typeof setTimeout>;
 let longTouchDone = false;
 
-export default class ThirdState extends Plugin {
-	settings: ThirdStateSettings;
+export default class BuJoStates extends Plugin {
+	settings: BuJoStatesSettings;
 
 	// What to do onLoad Plugin
 	async onload() {
@@ -54,9 +49,13 @@ export default class ThirdState extends Plugin {
 
 			const checkbox = Object(evt.target);
 
+			
+
 			if (
-				evt.shiftKey &&
-				checkbox.className === "task-list-item-checkbox"
+				//evt.shiftKey &&
+				checkbox.className === "task-list-item-checkbox" &&
+				checkbox.dataset.task !== " " &&
+				checkbox.dataset.task !== "<"
 			) {
 				evt.preventDefault();
 				this.checkState(checkbox);
@@ -116,10 +115,11 @@ export default class ThirdState extends Plugin {
 	 * @param checkbox
 	 */
 	checkState = function (checkbox: HTMLElement) {
-		if (checkbox.dataset.task === " ") {
-			this.changeState(checkbox, 'x');	
-			new Notice("Checkbox completion toggled!");
-		} else if (checkbox.dataset.task === "x"){
+		// if (checkbox.dataset.task === " ") {
+		// 	this.changeState(checkbox, 'x');	
+		// 	new Notice("Checkbox completion toggled!");
+		// } else 
+		if (checkbox.dataset.task === "x" || checkbox.dataset.task === " "){
 			this.changeState(checkbox, '/');	
 			new Notice("Checkbox half completion toggled!");
 		} else if (checkbox.dataset.task === "/"){
@@ -128,10 +128,11 @@ export default class ThirdState extends Plugin {
 		} else if (checkbox.dataset.task === ">"){
 			this.changeState(checkbox, '<');	
 			new Notice("Checkbox scheduling toggled!");
-		} else {
-			this.changeState(checkbox, ' ');	
-			new Notice("Checkbox reset!");
-		}
+		} 
+		// else {
+		// 	this.changeState(checkbox, ' ');	
+		// 	new Notice("Checkbox reset!");
+		// }
 
 	};
 
@@ -154,6 +155,8 @@ export default class ThirdState extends Plugin {
 			pos,
 			pos_end,
 		);
+
+		this.app.workspace.trigger('editor:refresh');
 	}
 
 	// What to do onUnLoad Plugin
@@ -225,9 +228,9 @@ export default class ThirdState extends Plugin {
  * Configuration of settings pan
  */
 class SampleSettingTab extends PluginSettingTab {
-	plugin: ThirdState;
+	plugin: BuJoStates;
 
-	constructor(app: App, plugin: ThirdState) {
+	constructor(app: App, plugin: BuJoStates) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
