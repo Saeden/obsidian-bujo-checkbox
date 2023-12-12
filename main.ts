@@ -120,10 +120,6 @@ export default class BuJoStates extends Plugin {
 	 * @param checkbox
 	 */
 	checkState = function (checkbox: HTMLElement) {
-		// if (checkbox.dataset.task === " ") {
-		// 	this.changeState(checkbox, 'x');	
-		// 	new Notice("Checkbox completion toggled!");
-		// } else 
 		if (checkbox.dataset.task === "x"){
 			this.changeState(checkbox, '/');	
 			new Notice("Checkbox half completion toggled!");
@@ -134,11 +130,6 @@ export default class BuJoStates extends Plugin {
 			this.changeState(checkbox, '<');	
 			new Notice("Checkbox scheduling toggled!");
 		} 
-		// else {
-		// 	this.changeState(checkbox, ' ');	
-		// 	new Notice("Checkbox reset!");
-		// }
-
 	};
 
 	/**
