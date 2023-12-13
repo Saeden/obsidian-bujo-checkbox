@@ -56,82 +56,68 @@ export default class BuJoStates extends Plugin {
 			const checkbox = Object(evt.target);
 
 			if (
+				evt.shiftKey &&
+				checkbox.className === "task-list-item-checkbox"
+				// trigger reset...
+			) {
+				this.resetState(checkbox, false);
+				//new Notice("Triggering reset is not completed yet...");
+				//console.error("Triggering reset is not completed yet...");
+			} else if (
 				checkbox.className === "task-list-item-checkbox" &&
 				checkbox.dataset.task !== " " &&
 				checkbox.dataset.task !== "<"
 			) {
 				evt.preventDefault();
 				this.checkState(checkbox);
-			} else if (
-				evt.shiftKey &&
-				checkbox.className === "task-list-item-checkbox"
-				// trigger reset...
-			) {
-				new Notice("Triggering reset is not implemented yet...");
-				console.error("Triggering reset is not implemented yet...");
-			}
+			} 
 		});
 
 		this.registerDomEvent(document, "touchend", (evt: TouchEvent) => {
 			const checkbox = Object(evt.target);
 
-			if (
-				checkbox.className === "task-list-item-checkbox" &&
-				checkbox.dataset.task !== " " &&
-				checkbox.dataset.task !== "<"
-			) {
-				evt.preventDefault();
-				this.checkState(checkbox);
-			}
+			
 		});
 
-		// // Touch Start Event
-		// this.registerDomEvent(
-		// 	document,
-		// 	"touchstart",
-		// 	(evt: TouchEvent) => {
-		// 		const checkbox = Object(evt.target);
-		// 		if (checkbox.className === "task-list-item-checkbox") {
-		// 			timer = setTimeout(
-		// 				this.onlongtouch,
-		// 				this.settings.touchduration,
-		// 				checkbox
-		// 			);
-		// 		}
-		// 	},
-		// 	{ passive: false }
-		// );
+		// Touch Start Event
+		this.registerDomEvent(
+			document,
+			"touchstart",
+			(evt: TouchEvent) => {
+				const checkbox = Object(evt.target);
+				if (checkbox.className === "task-list-item-checkbox" &&
+					checkbox.dataset.task !== " ") {
+					timer = setTimeout(
+						this.resetState,
+						this.settings.touchduration,
+						checkbox,
+						true
+					);
+				}
+			},
+			{ passive: false }
+		);
 
-		// // Touch End Event
-		// this.registerDomEvent(document, "touchend", (evt: TouchEvent) => {
-		// 	const checkbox = Object(evt.target);
-		// 	if (checkbox.className === "task-list-item-checkbox") {
-		// 		if (timer) clearTimeout(timer); // clearTimeout, not cleartimeout..
-		// 		if (longTouchDone) {
-		// 			evt.preventDefault();
-		// 			longTouchDone = false;
-		// 			return;
-		// 		}
-		// 	}
-		// });
+		// Touch End Event
+		this.registerDomEvent(document, "touchend", (evt: TouchEvent) => {
+			const checkbox = Object(evt.target);
+			if (checkbox.className === "task-list-item-checkbox" &&
+				checkbox.dataset.task !== " ") {
+				if (timer) clearTimeout(timer); // clearTimeout, not cleartimeout..
+				if (longTouchDone) {
+					evt.preventDefault();
+					longTouchDone = false;
+					return;
+				} else if (
+					checkbox.className === "task-list-item-checkbox"  &&
+					checkbox.dataset.task !== "<"
+				) {
+					evt.preventDefault();
+					this.checkState(checkbox);
+				}
+			}
+		});
 	}
-
-	/**
-	 * Dispatched function with timer onLongTouch. Duration see `touchduration`
-	 * @param checkbox
-	 */
-	onlongtouch = function (checkbox: HTMLElement) {
-		longTouchDone = true;
-		if (checkbox.dataset.task !== "/") {
-			checkbox.dataset.task = "/";
-			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = "/";
-			("/");
-		} else {
-			checkbox.dataset.task = " ";
-			Object(checkbox.closest(".HyperMD-list-line")).dataset.task = " ";
-		}
-		new Notice("Third state checkbox toggled!");
-	};
 
 	/**
 	 * Check the state of the checkbox, call the right state changed.
@@ -152,8 +138,8 @@ export default class BuJoStates extends Plugin {
 
 	/**
 	 * Change the state of the checkbox.
-	 * @param checkbox
-	 * @param char
+	 * @param checkbox -the HTML Element to be changed.
+	 * @param char -the char to change in source.
 	 */
 	changeState = function (checkbox: HTMLElement, char: String) {
 		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -169,8 +155,38 @@ export default class BuJoStates extends Plugin {
 			pos,
 			pos_end,
 		);
+	}
 
-		this.app.workspace.trigger('editor:refresh');
+	/**
+	 * Reset the state of the checkbox to empty.
+	 * @param checkbox -the checkbox that has been longpressed or shift-clicked.
+	 * @param touch -true if we are resetting on mobile, false if resetting on desktop.
+	 */
+	resetState = function (checkbox: HTMLElement, touch: boolean) {
+		const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+		const offset = view.editor.cm.posAtDOM(checkbox) - 2;
+		const offset_end = offset + 1;
+
+		const pos = view.editor.offsetToPos(offset);
+		const pos_end = view.editor.offsetToPos(offset_end);
+
+		let char;
+		
+		if (touch) {
+			longTouchDone=true;
+			char = ' ';
+		} else {
+			char = 'x'; // for some reason in this function trying to put a space char puts an 'x' and putting anything else puts a ' ', except on mobile??
+		}
+
+		view.editor.replaceRange(
+			char, 
+			pos,
+			pos_end,
+		);
+
+		
 	}
 
 	// What to do onUnLoad Plugin

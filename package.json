@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-bujo-checkbox-states",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "This is a simple plugin that adds 3 new states to the task checkbox, inspired by the BulletJournal method.",
 	"main": "main.js",
 	"scripts": {

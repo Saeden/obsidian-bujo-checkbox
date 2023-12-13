@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-bujo-checkbox",
 	"name": "BulletJournal Checkbox States",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"minAppVersion": "0.15.0",
 	"description": "This is a simple plugin that adds 3 new states to the task checkbox, inspired by the BulletJournal method.",
 	"author": "Matthijs Wolters",

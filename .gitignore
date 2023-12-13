@@ -24,3 +24,6 @@ data.json
 
 # my dev
 .env
+
+# ignore scripts
+*.sh
